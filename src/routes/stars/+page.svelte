@@ -7,7 +7,7 @@
 	onMount(() => {
 		new Rive({
 			// src: 'https://cdn.rive.app/animations/vehicles.riv',
-			src: 'src/lib/rating_animation.riv',
+			src: './rating_animation.riv',
 			// Or the path to a local Rive asset
 			// src: './example.riv',
 			canvas: canvas,
