@@ -30,6 +30,7 @@
 	"dependencies": {
 		"@fortawesome/free-brands-svg-icons": "^6.2.1",
 		"@fortawesome/free-solid-svg-icons": "^6.2.1",
+		"@rive-app/canvas": "^1.0.97",
 		"svelte-fa": "^3.0.3"
 	}
 }
