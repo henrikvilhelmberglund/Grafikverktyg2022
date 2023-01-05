@@ -1,6 +1,12 @@
 <script>
 	import { toHSL, toHex } from "$lib/colorConvert.js";
 	import Color from "$lib/Color.svelte";
+	// add below to component
+	let userInputString =
+		"#eef2ff #e0e7ff #c7d2fe #a5b4fc #818cf8 #6366f1 #4f46e5 #4338ca #3730a3 #312e81";
+	$: userInput = {
+		userInputColor: [userInputString]
+	};
 	let colorArray = {
 		// 10 hexes per color
 		test: [
@@ -62,7 +68,7 @@
 	// console.log("https://uicolors.app/edit?sv1=" + outputUIColors(colorArray));
 </script>
 
-<main class="p-4">
+<main class="p-4 flex flex-col">
 	<h1 class="font-bold text-lg">Colors</h1>
 	<a href={link} class="text-lg text-blue-600" target="_blank" rel="noreferrer">UIColorsApp</a>
 
