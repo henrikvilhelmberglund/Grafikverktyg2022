@@ -1,11 +1,12 @@
 const config = {
-  content: ["./src/**/*.{html,js,svelte,ts}"],
+	content: ["./src/**/*.{html,js,svelte,ts}"],
+	mode: "jit",
 
-  theme: {
-    extend: {}
-  },
+	theme: {
+		extend: {}
+	},
 
-  plugins: []
+	plugins: []
 };
 
 module.exports = config;
