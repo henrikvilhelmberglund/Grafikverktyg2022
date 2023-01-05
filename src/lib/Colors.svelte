@@ -93,7 +93,7 @@
 	<a href={link} class="text-lg text-blue-600" target="_blank" rel="noreferrer">UIColorsApp</a>
 	<label>
 		<input type="number" bind:value={hueShift} min="-225.9" max={360 - 244.5} />
-		<input type="range" class="w-[800px]" bind:value={hueShift} min="-225.9" max={360 - 244.5} />
+		<input type="range" class="w-[800px] h-24" bind:value={hueShift} min="-225.9" max={360 - 244.5} />
 	</label>
 	{#each Object.entries(Object.assign(mergedObject, customColor, colorArray)) as color}
 		<h2>{color[0]}</h2>

@@ -24,7 +24,7 @@
 
 	.middle {
 		width: 300px;
-		height: 300px;
+		height: 30px;
 		position: absolute;
 		left: 50%;
 		top: -10px;
