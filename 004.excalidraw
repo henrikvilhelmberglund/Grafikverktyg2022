@@ -1,0 +1,46 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "id": "-Ul87d6UFnNV_S9MGYdCJ",
+      "type": "text",
+      "x": 873,
+      "y": 203.1666693687439,
+      "width": 1178,
+      "height": 1550,
+      "angle": 0,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "roundness": null,
+      "seed": 1411560195,
+      "version": 2155,
+      "versionNonce": 330495555,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1672917265515,
+      "link": null,
+      "locked": false,
+      "text": "Inlämningsuppgift\n\n- Minst tre sidor med fungerande prototyplänkar\n- Inte kopior av sida utan sidor man navigerar till\n- Färdigt för produktion (med .txt, bilder etc i assetsmapp)\n\nG: \n- Preview ska man kunna klicka\n- Specifikation för färger och typsnitt i egen frame\n- README.md\n(se studentportal)\n- <förnamn>-<efternamn>-grafik-fend22-mapp\n- <förnamn>-<efternamn>-grafik-fend22.fig\n\nVG:\n- döpa komponenter/lager\n- upprepade element ska vara komponenter\n- använda styles för text/färger (men ingen ko på isen)\n- bilder ska vara bäst format för bilden (med fallbacks för nya format)\n- skriva några rader om varför man valde bildformatet\n\nLokal figmafil (eller Anyone with the link can view (i figmafilen))\nOkej med githubrepo (public)\n\n\nFigma\n\nKopiera - klicka framenamnet - paste för att få samma position\n\n\nPrototyp\n\nKan se vad som blir bäst innan man börjar bygga\n\nSätt device till Presentation om desktop, annars sätta device för mobil\n\nknappar på mobil, gör till autolayout och lägg till padding\n\nsmart animate för animation mellan states\n\nför många kopior: gör auto layout och duplicate med padding\n\nhorisontell scroll: clip content i lång component, dra ner size så resten inte syns, sen kan man scrolla över komponenten\n\nModal: dra från knapp till modal, open overlay\nadd background behind overlay\n\nclose overlay på knapp i modal så behöver den inte veta var den är i sidan\n\nju större element ju större animation\n\nlägga in i autolayout om man har t.ex många accordion\n\nloading för t.ex backendrquest med afterdelay (flera frames)\n\nskeleton loading för att få sidan att kännas snabbare att ladda\n\nanta att saker går bra t.ex meddelande, om det blir fel kan man visa i UI\n\nfake loadingspinner med stroke angular gradient + liten cirkel som täcker det fula\n\nnestad grupp, inre grupp roteras med smart animate, 1ms delay",
+      "fontSize": 20,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 1543,
+      "containerId": null,
+      "originalText": "Inlämningsuppgift\n\n- Minst tre sidor med fungerande prototyplänkar\n- Inte kopior av sida utan sidor man navigerar till\n- Färdigt för produktion (med .txt, bilder etc i assetsmapp)\n\nG: \n- Preview ska man kunna klicka\n- Specifikation för färger och typsnitt i egen frame\n- README.md\n(se studentportal)\n- <förnamn>-<efternamn>-grafik-fend22-mapp\n- <förnamn>-<efternamn>-grafik-fend22.fig\n\nVG:\n- döpa komponenter/lager\n- upprepade element ska vara komponenter\n- använda styles för text/färger (men ingen ko på isen)\n- bilder ska vara bäst format för bilden (med fallbacks för nya format)\n- skriva några rader om varför man valde bildformatet\n\nLokal figmafil (eller Anyone with the link can view (i figmafilen))\nOkej med githubrepo (public)\n\n\nFigma\n\nKopiera - klicka framenamnet - paste för att få samma position\n\n\nPrototyp\n\nKan se vad som blir bäst innan man börjar bygga\n\nSätt device till Presentation om desktop, annars sätta device för mobil\n\nknappar på mobil, gör till autolayout och lägg till padding\n\nsmart animate för animation mellan states\n\nför många kopior: gör auto layout och duplicate med padding\n\nhorisontell scroll: clip content i lång component, dra ner size så resten inte syns, sen kan man scrolla över komponenten\n\nModal: dra från knapp till modal, open overlay\nadd background behind overlay\n\nclose overlay på knapp i modal så behöver den inte veta var den är i sidan\n\nju större element ju större animation\n\nlägga in i autolayout om man har t.ex många accordion\n\nloading för t.ex backendrquest med afterdelay (flera frames)\n\nskeleton loading för att få sidan att kännas snabbare att ladda\n\nanta att saker går bra t.ex meddelande, om det blir fel kan man visa i UI\n\nfake loadingspinner med stroke angular gradient + liten cirkel som täcker det fula\n\nnestad grupp, inre grupp roteras med smart animate, 1ms delay"
+    }
+  ],
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}
