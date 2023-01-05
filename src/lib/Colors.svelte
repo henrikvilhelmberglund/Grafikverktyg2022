@@ -1,5 +1,30 @@
 <script>
 	import { toHSL, toHex } from "$lib/colorConvert.js";
+	let hueShift = 0;
+	let mergedObject = {};
+	$: customColor = {
+		custom: [
+			toHex(225.9 + hueShift, 100, 96.7) +
+				" " +
+				toHex(226.5 + hueShift, 100, 93.9) +
+				" " +
+				toHex(228 + hueShift, 96.5, 88.8) +
+				" " +
+				toHex(229.7 + hueShift, 93.5, 81.8) +
+				" " +
+				toHex(234.5 + hueShift, 89.5, 73.9) +
+				" " +
+				toHex(238.7 + hueShift, 83.5, 66.7) +
+				" " +
+				toHex(243.4 + hueShift, 75.4, 58.6) +
+				" " +
+				toHex(244.5 + hueShift, 57.9, 50.6) +
+				" " +
+				toHex(243.7 + hueShift, 54.5, 41.4) +
+				" " +
+				toHex(242.2 + hueShift, 47.4, 34.3)
+		]
+	};
 	let colorArray = {
 		// 10 hexes per color
 		test: [
@@ -57,14 +82,20 @@
 		outputColors = outputColors.slice(0, -1);
 		return outputColors;
 	}
-	let link = "https://uicolors.app/edit?sv1=" + outputUIColors(colorArray);
+	$: link =
+		"https://uicolors.app/edit?sv1=" +
+		outputUIColors(Object.assign(mergedObject, customColor, colorArray));
 	// console.log("https://uicolors.app/edit?sv1=" + outputUIColors(colorArray));
 </script>
 
 <main class="p-4">
 	<h1 class="font-bold text-lg">Colors</h1>
 	<a href={link} class="text-lg text-blue-600" target="_blank" rel="noreferrer">UIColorsApp</a>
-	{#each Object.entries(colorArray) as color}
+	<label>
+		<input type="number" bind:value={hueShift} min="-225.9" max={360 - 244.5} />
+		<input type="range" class="w-[800px]" bind:value={hueShift} min="-225.9" max={360 - 244.5} />
+	</label>
+	{#each Object.entries(Object.assign(mergedObject, customColor, colorArray)) as color}
 		<h2>{color[0]}</h2>
 		<svg
 			width="1000"
