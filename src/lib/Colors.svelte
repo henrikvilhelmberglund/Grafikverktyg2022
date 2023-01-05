@@ -68,11 +68,13 @@
 	// console.log("https://uicolors.app/edit?sv1=" + outputUIColors(colorArray));
 </script>
 
-<main class="p-4 flex flex-col">
+<main class="p-4 flex flex-col bg-slate-400 items-center">
 	<h1 class="font-bold text-lg">Colors</h1>
 	<a href={link} class="text-lg text-blue-600" target="_blank" rel="noreferrer">UIColorsApp</a>
 
 	{#each Object.entries(colorArray) as color}
-		<Color name={color[0]} colors={color[1]} />
+		<article class="bg-slate-50 m-1 w-[60vw] rounded-lg">
+			<Color name={color[0]} colors={color[1]} />
+		</article>
 	{/each}
 </main>
