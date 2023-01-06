@@ -5,6 +5,7 @@
 	import { toHSL, toHex } from "$lib/colorConvert.js";
 	import { ntc } from "$lib/ntc.js";
 	export let colors;
+	export let originalColors;
 	export let colorIndex;
 	export let childColorOutput;
 	let showModalHex = false;
@@ -97,7 +98,7 @@
 			}
 		);
 	}
-	$allColors[colorIndex] = { [matched]: editedColors };
+	// $allColors[colorIndex] = { [matched]: editedColors };
 	function updateStore() {
 		$allColors[colorIndex] = { [matched]: editedColors };
 	}
@@ -125,6 +126,7 @@
 	}
 </script>
 
+{colorIndex}
 <main class="flex">
 	<article
 		class="flex flex-col items-center p-4 pb-0 bg-slate-50 m-4 w-[52vw] rounded-lg shadow-black drop-shadow-xl">
@@ -139,64 +141,29 @@
 					id="userInput"
 					bind:value={userInput}
 					on:input={() => {
-						colors = Array(userInput);
-						editedColors = addHSLShift(colors);
+						editedColors = Array(userInput);
+						editedColors = addHSLShift(editedColors);
 						updateStore();
 					}}
-					class="w-[33vw] text-center border-black border-2 rounded-lg w-[52vw]" />
+					class="w-[34vw] text-center border-black border-2 rounded-lg w-[52vw]" />
 			</label>
 		</div>
 		<div class="flex">
-			<div class="flex flex-col w-[12vw] p-4">
-				<label>
-					Hue shift:
-					<input
-						class="h-12"
-						type="number"
-						bind:value={hueShift}
-						on:input={() => {
-							editedColors = addHSLShift(colors);
-							updateStore();
-						}}
-						min="-180"
-						max="180" />
-				</label>
-				<label>
-					Saturation shift:
-					<input
-						class="h-12"
-						type="number"
-						bind:value={saturationShift}
-						on:input={() => {
-							editedColors = addHSLShift(colors);
-							updateStore();
-						}}
-						min="-100"
-						max="100" />
-				</label>
-				<label>
-					Lightness shift:
-					<input
-						class="h-12"
-						type="number"
-						bind:value={lightnessShift}
-						on:input={() => {
-							editedColors = addHSLShift(colors);
-							updateStore();
-						}}
-						min="-50"
-						max="50" />
-				</label>
+			<div class="flex flex-col w-[12vw] [&>*]:h-12 p-4 pt-7">
+				<p>Hue shift:</p>
+				<p>Saturation shift:</p>
+				<p>Lightness shift:</p>
 			</div>
 			<div class="flex flex-col w-[40vw] p-4 ">
 				<input
 					type="range"
 					class="h-12"
 					bind:value={hueShift}
-					on:input={() => {
+					on:input={(e) => {
 						editedColors = addHSLShift(colors);
-						updateStore();
+						console.log(e);
 					}}
+					on:mouseup={() => updateStore()}
 					min="-180"
 					max="180" />
 				<input
@@ -205,8 +172,8 @@
 					bind:value={saturationShift}
 					on:input={() => {
 						editedColors = addHSLShift(colors);
-						updateStore();
 					}}
+					on:mouseup={() => updateStore()}
 					min="-100"
 					max="100" />
 
@@ -216,8 +183,8 @@
 					bind:value={lightnessShift}
 					on:input={() => {
 						editedColors = addHSLShift(colors);
-						updateStore();
 					}}
+					on:mouseup={() => updateStore()}
 					min="-50"
 					max="50" />
 			</div>
@@ -271,6 +238,26 @@
 			class="text-lg text-center text-black bg-blue-300 p-4 m-8 mb-0 flex-1 w-full rounded-xl shadow-lg shadow-blue-400 hover:bg-blue-200 active:bg-blue-100">
 			Copy SVG to clipboard
 		</button>
+	</div>
+	{editedColors}
+	<br />
+	{#each Object.entries(originalColors[colorIndex]) as color}
+		{color[1]}
+	{/each}
+	<div class="absolute bg-slate-50 right-12 m-4 rounded-lg">
+		<button
+			class="bg-red-800 text-white p-4 m-4 rounded-xl shadow-lg shadow-red-400 hover:bg-red-500 active:bg-red-400"
+			on:click={() => {
+				editedColors = Object.entries(originalColors[colorIndex])[0][1];
+				hueShift = 0;
+				saturationShift = 0;
+				lightnessShift = 0;
+				colorToMatch = editedColors.join().split(" ")[4];
+				matchedHex = ntc.name(colorToMatch)[0].toLowerCase();
+				matched = ntc.name(colorToMatch)[1];
+				updateStore();
+			}}>
+			Reset Color</button>
 	</div>
 </main>
 
