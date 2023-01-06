@@ -128,7 +128,7 @@
 <main class="flex">
 	<article
 		class="flex flex-col items-center p-4 pb-0 bg-slate-50 m-4 w-[52vw] rounded-lg shadow-black drop-shadow-xl">
-		<div>
+		<div class="[&>*]:text-center">
 			<p>Current colors:</p>
 			<p>
 				{editedColors}
@@ -143,76 +143,85 @@
 						editedColors = addHSLShift(colors);
 						updateStore();
 					}}
-					class="w-[800px] border-black border-2 rounded-lg w-[52vw]" />
+					class="w-[33vw] text-center border-black border-2 rounded-lg w-[52vw]" />
 			</label>
 		</div>
+		<div class="flex">
+			<div class="flex flex-col w-[12vw] p-4">
+				<label>
+					Hue shift:
+					<input
+						class="h-12"
+						type="number"
+						bind:value={hueShift}
+						on:input={() => {
+							editedColors = addHSLShift(colors);
+							updateStore();
+						}}
+						min="-180"
+						max="180" />
+				</label>
+				<label>
+					Saturation shift:
+					<input
+						class="h-12"
+						type="number"
+						bind:value={saturationShift}
+						on:input={() => {
+							editedColors = addHSLShift(colors);
+							updateStore();
+						}}
+						min="-100"
+						max="100" />
+				</label>
+				<label>
+					Lightness shift:
+					<input
+						class="h-12"
+						type="number"
+						bind:value={lightnessShift}
+						on:input={() => {
+							editedColors = addHSLShift(colors);
+							updateStore();
+						}}
+						min="-50"
+						max="50" />
+				</label>
+			</div>
+			<div class="flex flex-col w-[40vw] p-4 ">
+				<input
+					type="range"
+					class="h-12"
+					bind:value={hueShift}
+					on:input={() => {
+						editedColors = addHSLShift(colors);
+						updateStore();
+					}}
+					min="-180"
+					max="180" />
+				<input
+					type="range"
+					class="h-12"
+					bind:value={saturationShift}
+					on:input={() => {
+						editedColors = addHSLShift(colors);
+						updateStore();
+					}}
+					min="-100"
+					max="100" />
 
-		<input
-			type="range"
-			class="w-[52vw] h-4"
-			bind:value={hueShift}
-			on:input={() => {
-				editedColors = addHSLShift(colors);
-				updateStore();
-			}}
-			min="-180"
-			max="180" />
-		<label>
-			Hue shift:
-			<input
-				type="number"
-				bind:value={hueShift}
-				on:input={() => {
-					editedColors = addHSLShift(colors);
-					updateStore();
-				}}
-				min="-180"
-				max="180" />
-		</label>
-		<input
-			type="range"
-			class="w-[52vw] h-4"
-			bind:value={saturationShift}
-			on:input={() => {
-				editedColors = addHSLShift(colors);
-				updateStore();
-			}}
-			min="-50"
-			max="50" />
-		<label>
-			Saturation shift:
-			<input
-				type="number"
-				bind:value={saturationShift}
-				on:input={() => {
-					editedColors = addHSLShift(colors);
-					updateStore();
-				}}
-				min="-50"
-				max="50" />
-		</label>
-		<input
-			type="range"
-			class="w-[52vw] h-4"
-			bind:value={lightnessShift}
-			on:input={() => {
-				editedColors = addHSLShift(colors);
-				updateStore();
-			}}
-			min="-50"
-			max="50" />
-		<label>
-			Lightness shift:
-			<input
-				type="number"
-				bind:value={lightnessShift}
-				on:input={() => {
-					editedColors = addHSLShift(colors);
-					updateStore();
-				}}
-				min="-50"
-				max="50" />
-		</label>
+				<input
+					type="range"
+					class="h-12"
+					bind:value={lightnessShift}
+					on:input={() => {
+						editedColors = addHSLShift(colors);
+						updateStore();
+					}}
+					min="-50"
+					max="50" />
+			</div>
+		</div>
 		{#if matched}
 			<p class="text-2xl" style="--theme-color: {matchedHex}">
 				{matched}
