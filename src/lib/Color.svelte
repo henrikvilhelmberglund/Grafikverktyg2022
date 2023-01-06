@@ -21,6 +21,9 @@
 	$: hueShift = 0;
 	$: saturationShift = 0;
 	$: lightnessShift = 0;
+	let hueOffset = 0;
+	let saturationOffset = 0;
+	let lightnessOffset = 0;
 
 	function addHSLShift(colorString, type) {
 		let splitColorString = colorString[0].split(" ");
@@ -33,41 +36,41 @@
 			let lightness = split.split(",")[2].split("%")[0];
 			hueNew = +hueNew.split(",")[0];
 			if (type === "hue") {
-				hueNew += +hueShift;
+        hueNew += +hueShift + hueOffset;
 			}
 			saturation = +saturation;
 			if (type === "saturation") {
-				saturation += +saturationShift;
+				saturation += +saturationShift + saturationOffset;
 			}
 
 			lightness = +lightness;
 			if (type === "lightness") {
-				lightness += +lightnessShift;
-			}
-			if (hueNew < 0) {
-				hueNew += 360;
-			}
-			if (hueNew >= 360) {
-				hueNew -= 360;
-			}
-			if (saturation < 0) {
-				saturation = 0;
-			}
-			if (saturation >= 100) {
-				saturation = 100;
-			}
-			if (lightness < 0) {
-				lightness = 0;
-			}
-			if (lightness >= 100) {
-				lightness = 100;
+				lightness += +lightnessShift + lightnessOffset;
 			}
 
+      if (hueNew < 0) {
+        hueNew += 360;
+      }
+      if (hueNew >= 360) {
+        hueNew -= 360;
+      }
+      if (saturation < 0) {
+        saturation = 0;
+      }
+      if (saturation >= 100) {
+        saturation = 100;
+      }
+      if (lightness < 0) {
+        lightness = 0;
+      }
+      if (lightness >= 100) {
+        lightness = 100;
+      }
 			let hex = toHex(hueNew, saturation, lightness);
 			if (i < 9) {
-				changedColors += hex + " ";
+        changedColors += hex + " ";
 			} else {
-				changedColors += hex;
+        changedColors += hex;
 			}
 		});
 		let outputArray = [];
@@ -178,6 +181,7 @@
 					}}
 					on:mouseup={() => {
 						updateStore();
+						hueOffset = -hueShift;
 						// resetHue();
 					}}
 					min="-180"
@@ -191,6 +195,7 @@
 					}}
 					on:mouseup={() => {
 						updateStore();
+						saturationOffset = -saturationShift;
 					}}
 					min="-100"
 					max="100" />
@@ -204,9 +209,10 @@
 					}}
 					on:mouseup={() => {
 						updateStore();
+						lightnessOffset = -lightnessShift;
 					}}
-					min="-50"
-					max="50" />
+					min="-10"
+					max="10" />
 			</div>
 		</div>
 		{#if matched}
@@ -268,6 +274,9 @@
 				colorToMatch = editedColors.join().split(" ")[4];
 				matchedHex = ntc.name(colorToMatch)[0].toLowerCase();
 				matched = ntc.name(colorToMatch)[1];
+				hueOffset = 0;
+				saturationOffset = 0;
+				lightnessOffset = 0;
 				updateStore();
 			}}>
 			Reset Color</button>
