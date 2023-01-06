@@ -126,7 +126,6 @@
 	}
 </script>
 
-{colorIndex}
 <main class="flex">
 	<article
 		class="flex flex-col items-center p-4 pb-0 bg-slate-50 m-4 w-[52vw] rounded-lg shadow-black drop-shadow-xl">
