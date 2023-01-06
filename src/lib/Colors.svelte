@@ -1,12 +1,9 @@
 <script>
+	import { allColors } from "$lib/stores.js";
+	allColors.set([]);
 	import { toHSL, toHex } from "$lib/colorConvert.js";
 	import Color from "$lib/Color.svelte";
 	// add below to component
-	let userInputString =
-		"#eef2ff #e0e7ff #c7d2fe #a5b4fc #818cf8 #6366f1 #4f46e5 #4338ca #3730a3 #312e81";
-	$: userInput = {
-		userInputColor: [userInputString]
-	};
 	let colorArray = {
 		// 10 hexes per color
 		test: [
@@ -43,38 +40,41 @@
 		emerald: ["#ecfdf5 #d1fae5 #a7f3d0 #6ee7b7 #34d399 #10b981 #059669 #047857 #065f46 #064e3b"],
 		teal: ["#f0fdfa #ccfbf1 #99f6e4 #5eead4 #2dd4bf #14b8a6 #0d9488 #0f766e #115e59 #134e4a"]
 	};
-	console.log(toHex(100, 50, 50) + " " + toHex(110, 50, 50));
-	function outputUIColors(object) {
+	function outputUIColorsStore(inputArray) {
 		let outputColor = "";
 		let outputColors = "";
-		Object.entries(object).forEach((array) => {
-			array[1].forEach((color) => {
-				outputColor = array[0] + ":";
-				color = color.split(" ");
-				color.forEach((item, j) => {
-					item = item.replaceAll("#", "");
-					item = j === 0 ? "50-" + item : `/${j * 100}-` + item;
-					outputColor += item;
+		inputArray.forEach((colorSet) => {
+			Object.entries(colorSet).forEach((array) => {
+				array[1].forEach((color) => {
+					outputColor = array[0] + ":";
+					color = color.split(" ");
+					color.forEach((item, j) => {
+						item = item.replaceAll("#", "");
+						item = j === 0 ? "50-" + item : `/${j * 100}-` + item;
+						outputColor += item;
+					});
+					outputColors += `${outputColor};`;
+					outputColors = outputColors.slice(0, -1);
+					outputColors += ";";
 				});
-				outputColors += `${outputColor};`;
-				outputColors = outputColors.slice(0, -1);
-				outputColors += ";";
 			});
 		});
 		outputColors = outputColors.slice(0, -1);
 		return outputColors;
 	}
-	$: link = "https://uicolors.app/edit?sv1=" + outputUIColors(colorArray);
-	// console.log("https://uicolors.app/edit?sv1=" + outputUIColors(colorArray));
+	$: link = "https://uicolors.app/edit?sv1=" + outputUIColorsStore($allColors);
 </script>
 
 <main class="p-4 flex flex-col bg-slate-400 items-center">
 	<h1 class="font-bold text-lg">Colors</h1>
-	<a href={link} class="text-lg text-blue-600" target="_blank" rel="noreferrer">UIColorsApp</a>
-
-	{#each Object.entries(colorArray) as color}
-		<article class="bg-slate-50 m-1 w-[60vw] rounded-lg">
-			<Color name={color[0]} colors={color[1]} />
-		</article>
+	<a
+		href={link}
+		class="text-lg text-center text-black bg-blue-300 p-4 rounded-xl shadow-lg shadow-blue-400 hover:bg-blue-200 active:bg-blue-100"
+		target="_blank"
+		rel="noreferrer">
+		Send all colors to UIColorsApp
+	</a>
+	{#each Object.entries(colorArray) as color, i}
+		<Color colors={color[1]} colorIndex={i} childColorOutput={outputUIColorsStore($allColors)} />
 	{/each}
 </main>
