@@ -6,27 +6,8 @@
 	// add below to component
 	let colorArray = {
 		// 10 hexes per color
-		test: [
-			toHex(100, 50, 95) +
-				" " +
-				toHex(110, 50, 90) +
-				" " +
-				toHex(120, 50, 81) +
-				" " +
-				toHex(130, 50, 67) +
-				" " +
-				toHex(140, 50, 51) +
-				" " +
-				toHex(150, 50, 50) +
-				" " +
-				toHex(160, 50, 46) +
-				" " +
-				toHex(170, 50, 41) +
-				" " +
-				toHex(180, 50, 35) +
-				" " +
-				toHex(190, 50, 26)
-		],
+		custom: ["#eef2ff #e0e7ff #c7d2fe #a5b4fc #818cf8 #6366f1 #4f46e5 #4338ca #3730a3 #312e81"],
+		slate: ["#f8fafc #f1f5f9 #e2e8f0 #cbd5e1 #94a3b8 #64748b #475569 #334155 #1e293b #0f172a"],
 		indigo: ["#eef2ff #e0e7ff #c7d2fe #a5b4fc #818cf8 #6366f1 #4f46e5 #4338ca #3730a3 #312e81"],
 		violet: ["#f5f3ff #ede9fe #ddd6fe #c4b5fd #a78bfa #8b5cf6 #7c3aed #6d28d9 #5b21b6 #4c1d95"],
 		purple: ["#faf5ff #f3e8ff #e9d5ff #d8b4fe #c084fc #a855f7 #9333ea #7e22ce #6b21a8 #581c87"],
