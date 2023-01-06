@@ -1,12 +1,14 @@
 <script>
 	import { allColors } from "$lib/stores.js";
 	import ModalCopyHex from "./ModalCopyHex.svelte";
+	import ModalCopySVG from "./ModalCopySVG.svelte";
 	import { toHSL, toHex } from "$lib/colorConvert.js";
 	import { ntc } from "$lib/ntc.js";
 	export let colors;
 	export let colorIndex;
 	export let childColorOutput;
-	let showModal = false;
+	let showModalHex = false;
+	let showModalSVG = false;
 	let modalHex;
 	let colorToMatch = colors.join().split(" ")[4];
 	let matched = ntc.name(colorToMatch)[1];
@@ -75,9 +77,9 @@
 	function copyHex(i) {
 		modalHex = editedColors[0].split(" ")[i];
 		console.log(editedColors[0].split(" ")[i]);
-		showModal = true;
+		showModalHex = true;
 		setTimeout(() => {
-			showModal = false;
+			showModalHex = false;
 		}, 1000);
 	}
 	// https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/write
@@ -116,6 +118,10 @@
 		SVGString += rectString.join("");
 		SVGString += "\n</svg>";
 		setClipboard(SVGString);
+		showModalSVG = true;
+		setTimeout(() => {
+			showModalSVG = false;
+		}, 1000);
 	}
 </script>
 
@@ -236,8 +242,11 @@
 		</svg>
 	</article>
 
-	{#if showModal}
+	{#if showModalHex}
 		<ModalCopyHex {modalHex} />
+	{/if}
+	{#if showModalSVG}
+		<ModalCopySVG />
 	{/if}
 
 	<div class="flex flex-col items-center p-4 bg-slate-50 m-4 w-[12vw] rounded-lg">
@@ -247,7 +256,9 @@
 			target="_blank"
 			rel="noreferrer">Send {matched} to UIColorsApp</a>
 		<button
-			on:click={() => outputSVGString()}
+			on:click={() => {
+				outputSVGString();
+			}}
 			class="text-lg text-center text-black bg-blue-300 p-4 m-8 mb-0 flex-1 w-full rounded-xl shadow-lg shadow-blue-400 hover:bg-blue-200 active:bg-blue-100">
 			Copy SVG to clipboard
 		</button>

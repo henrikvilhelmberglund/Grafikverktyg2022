@@ -22,7 +22,7 @@
 
 <div
 	transition:fly={{ y: 100 }}
-	class="fixed bottom-12 left-1/2 bg-white p-8 rounded-3xl text-xl z-20 border-black border-2 shadow-black shadow-2xl">
+	class="fixed bottom-12 left-[35vw] bg-white p-8 rounded-3xl text-xl z-20 border-black border-2 shadow-black shadow-2xl">
 	<p>
 		Copied <span style="color: {modalHex}">{modalHex}</span> to clipboard!
 	</p>
