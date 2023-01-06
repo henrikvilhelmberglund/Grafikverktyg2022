@@ -79,7 +79,6 @@
 	{#each $allColors as colorSet, i}
 		{#each Object.entries(colorSet) as color}
 			<!-- {color[1]} -->
-			<br />
 			<Color
 				colors={color[1]}
 				colorIndex={i}

@@ -239,11 +239,6 @@
 			Copy SVG to clipboard
 		</button>
 	</div>
-	{editedColors}
-	<br />
-	{#each Object.entries(originalColors[colorIndex]) as color}
-		{color[1]}
-	{/each}
 	<div class="absolute bg-slate-50 right-12 m-4 rounded-lg">
 		<button
 			class="bg-red-800 text-white p-4 m-4 rounded-xl shadow-lg shadow-red-400 hover:bg-red-500 active:bg-red-400"
