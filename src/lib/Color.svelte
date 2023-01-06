@@ -1,4 +1,5 @@
 <script>
+	// TODO: fix bugs :)
 	import { allColors } from "$lib/stores.js";
 	import ModalCopyHex from "./ModalCopyHex.svelte";
 	import ModalCopySVG from "./ModalCopySVG.svelte";
@@ -21,7 +22,7 @@
 	$: saturationShift = 0;
 	$: lightnessShift = 0;
 
-	function addHSLShift(colorString) {
+	function addHSLShift(colorString, type) {
 		let splitColorString = colorString[0].split(" ");
 		let changedColors = "";
 		splitColorString.forEach((color, i) => {
@@ -31,12 +32,18 @@
 			let saturation = split.split(",")[1].split("%")[0];
 			let lightness = split.split(",")[2].split("%")[0];
 			hueNew = +hueNew.split(",")[0];
-			hueNew += +hueShift;
+			if (type === "hue") {
+				hueNew += +hueShift;
+			}
 			saturation = +saturation;
+			if (type === "saturation") {
+				saturation += +saturationShift;
+			}
+
 			lightness = +lightness;
-			saturation += +saturationShift;
-			lightness += +lightnessShift;
-			// console.log(hueNew);
+			if (type === "lightness") {
+				lightness += +lightnessShift;
+			}
 			if (hueNew < 0) {
 				hueNew += 360;
 			}
@@ -124,6 +131,14 @@
 			showModalSVG = false;
 		}, 1000);
 	}
+	function resetHue() {
+		hueShift = 0;
+	}
+	function resetSliders() {
+		hueShift = 0;
+		saturationShift = 0;
+		lightnessShift = 0;
+	}
 </script>
 
 <main class="flex">
@@ -158,11 +173,13 @@
 					type="range"
 					class="h-12"
 					bind:value={hueShift}
-					on:input={(e) => {
-						editedColors = addHSLShift(colors);
-						console.log(e);
+					on:input={() => {
+						editedColors = addHSLShift(colors, "hue");
 					}}
-					on:mouseup={() => updateStore()}
+					on:mouseup={() => {
+						updateStore();
+						// resetHue();
+					}}
 					min="-180"
 					max="180" />
 				<input
@@ -170,9 +187,11 @@
 					class="h-12"
 					bind:value={saturationShift}
 					on:input={() => {
-						editedColors = addHSLShift(colors);
+						editedColors = addHSLShift(colors, "saturation");
 					}}
-					on:mouseup={() => updateStore()}
+					on:mouseup={() => {
+						updateStore();
+					}}
 					min="-100"
 					max="100" />
 
@@ -181,9 +200,11 @@
 					class="h-12"
 					bind:value={lightnessShift}
 					on:input={() => {
-						editedColors = addHSLShift(colors);
+						editedColors = addHSLShift(colors, "lightness");
 					}}
-					on:mouseup={() => updateStore()}
+					on:mouseup={() => {
+						updateStore();
+					}}
 					min="-50"
 					max="50" />
 			</div>
@@ -243,9 +264,7 @@
 			class="bg-red-800 text-white p-4 m-4 rounded-xl shadow-lg shadow-red-400 hover:bg-red-500 active:bg-red-400"
 			on:click={() => {
 				editedColors = Object.entries(originalColors[colorIndex])[0][1];
-				hueShift = 0;
-				saturationShift = 0;
-				lightnessShift = 0;
+				resetSliders();
 				colorToMatch = editedColors.join().split(" ")[4];
 				matchedHex = ntc.name(colorToMatch)[0].toLowerCase();
 				matched = ntc.name(colorToMatch)[1];
