@@ -1,30 +1,38 @@
 <script>
+	import { allColors } from "$lib/stores.js";
+	import ModalCopyHex from "./ModalCopyHex.svelte";
 	import { toHSL, toHex } from "$lib/colorConvert.js";
 	import { ntc } from "$lib/ntc.js";
 	export let colors;
+	export let colorIndex;
+	export let childColorOutput;
+	let showModal = false;
+	let modalHex;
 	let colorToMatch = colors.join().split(" ")[4];
-	export let name = "default";
 	let matched = ntc.name(colorToMatch)[1];
 	let matchedHex = ntc.name(colorToMatch)[0].toLowerCase();
-	console.log(matchedHex);
+	// console.log(matchedHex);
 	let editedColors = colors;
 	let userInput = colors;
 	$: hueShift = 0;
+	$: saturationShift = 0;
+	$: lightnessShift = 0;
 
-	function addHueShift(colorString) {
+	function addHSLShift(colorString) {
 		let splitColorString = colorString[0].split(" ");
 		let changedColors = "";
 		splitColorString.forEach((color, i) => {
-			// console.log(color);
 			let hsl = toHSL(color);
-			// console.log(hsl);
-			let tohexx = toHex(hsl);
 			let split = hsl.split("(")[1];
 			let hueNew = hsl.split("(")[1];
 			let saturation = split.split(",")[1].split("%")[0];
 			let lightness = split.split(",")[2].split("%")[0];
 			hueNew = +hueNew.split(",")[0];
 			hueNew += +hueShift;
+			saturation = +saturation;
+			lightness = +lightness;
+			saturation += +saturationShift;
+			lightness += +lightnessShift;
 			// console.log(hueNew);
 			if (hueNew < 0) {
 				hueNew += 360;
@@ -32,27 +40,31 @@
 			if (hueNew >= 360) {
 				hueNew -= 360;
 			}
+			if (saturation < 0) {
+				saturation = 0;
+			}
+			if (saturation >= 100) {
+				saturation = 100;
+			}
+			if (lightness < 0) {
+				lightness = 0;
+			}
+			if (lightness >= 100) {
+				lightness = 100;
+			}
 
-			// let hslNew = `hsl(${hueNew}, ${saturation}, ${lightness}`;
 			let hex = toHex(hueNew, saturation, lightness);
-			// console.log(`${hueNew},${saturation},${lightness}`);
-			// console.log(hex);
 			if (i < 9) {
 				changedColors += hex + " ";
 			} else {
 				changedColors += hex;
 			}
-			// console.log(changedColors);
 		});
 		let outputArray = [];
 		outputArray.push(changedColors);
-		// outputArray = outputArray;
-		// outputArray = outputArray;
-		// console.log(outputArray);
 		colorToMatch = outputArray.join().split(" ")[4];
 		matchedHex = ntc.name(colorToMatch)[0].toLowerCase();
 		matched = ntc.name(colorToMatch)[1];
-		// console.log(matched);
 		return outputArray;
 	}
 	function log() {
@@ -60,71 +72,187 @@
 		console.log(editedColors);
 		console.log(userInput);
 	}
+	function copyHex(i) {
+		modalHex = editedColors[0].split(" ")[i];
+		console.log(editedColors[0].split(" ")[i]);
+		showModal = true;
+		setTimeout(() => {
+			showModal = false;
+		}, 1000);
+	}
+	// https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/write
+	function setClipboard(text) {
+		const type = "text/plain";
+		const blob = new Blob([text], { type });
+		const data = [new ClipboardItem({ [type]: blob })];
 
-	// TODO
-	// fix UIColorsApp output (and add a button for every color to send it to UIColorsApp)
-	// add saturation and lightness sliders
-	// add copy string button
-	// add copy SVG button
+		navigator.clipboard.write(data).then(
+			() => {
+				/* success */
+			},
+			() => {
+				/* failure */
+			}
+		);
+	}
+	$allColors[colorIndex] = { [matched]: editedColors };
+	function updateStore() {
+		$allColors[colorIndex] = { [matched]: editedColors };
+	}
+	function outputSVGString() {
+		let SVGString = `<svg width="1000" height="100" viewBox="0 0 1000 100" fill="none" xmlns="http://www.w3.org/2000/svg">`;
+		let rectString = [];
+		editedColors.forEach((hexes) => {
+			hexes = hexes.split(" ");
+			hexes.forEach((hex, i) => {
+				rectString.push(
+					`\n    <rect id="${
+						i === 0 ? matched + "/50" : matched + "/" + i * 100
+					}" width="100" height="100" fill="${hex}" x="${i * 100}" y="0"/>`
+				);
+			});
+		});
+		rectString.reverse();
+		SVGString += rectString.join("");
+		SVGString += "\n</svg>";
+		setClipboard(SVGString);
+	}
 </script>
 
-<div class="flex flex-col items-center p-4">
-	<div>
-		<p>Current colors:</p>
-		<p>
-			{editedColors}
-		</p>
-		<label>
-			<input
-				type="text"
-				id="userInput"
-				bind:value={userInput}
-				on:input={() => {
-					colors = Array(userInput);
-					editedColors = addHueShift(colors);
-				}}
-				class="w-[800px] border-black border-2 rounded-lg"
-			/>
-		</label>
-	</div>
+<main class="flex">
+	<article
+		class="flex flex-col items-center p-4 pb-0 bg-slate-50 m-4 w-[52vw] rounded-lg shadow-black drop-shadow-xl">
+		<div>
+			<p>Current colors:</p>
+			<p>
+				{editedColors}
+			</p>
+			<label>
+				<input
+					type="text"
+					id="userInput"
+					bind:value={userInput}
+					on:input={() => {
+						colors = Array(userInput);
+						editedColors = addHSLShift(colors);
+						updateStore();
+					}}
+					class="w-[800px] border-black border-2 rounded-lg w-[52vw]" />
+			</label>
+		</div>
 
-	<input
-		type="range"
-		class="w-[800px] h-24"
-		bind:value={hueShift}
-		on:input={() => (editedColors = addHueShift(colors))}
-		min="-180"
-		max="180"
-	/>
-	<label>
-		Hue shift:
 		<input
-			type="number"
+			type="range"
+			class="w-[52vw] h-4"
 			bind:value={hueShift}
-			on:input={() => (editedColors = addHueShift(colors))}
+			on:input={() => {
+				editedColors = addHSLShift(colors);
+				updateStore();
+			}}
 			min="-180"
-			max="180"
-		/>
-	</label>
-	{#if matched}
-		<p class="text-2xl" style="--theme-color: {matchedHex}">
-			{matched}
-		</p>
-	{/if}
-	<svg
-		width="1000"
-		height="100"
-		viewBox="0 0 1000 100"
-		fill="none"
-		xmlns="http://www.w3.org/2000/svg"
-	>
-		{#each editedColors as hexes}
-			{#each hexes.split(" ") as hex, i}
-				<rect width="100" height="100" fill={hex} x={i * 100} y="0" />
+			max="180" />
+		<label>
+			Hue shift:
+			<input
+				type="number"
+				bind:value={hueShift}
+				on:input={() => {
+					editedColors = addHSLShift(colors);
+					updateStore();
+				}}
+				min="-180"
+				max="180" />
+		</label>
+		<input
+			type="range"
+			class="w-[52vw] h-4"
+			bind:value={saturationShift}
+			on:input={() => {
+				editedColors = addHSLShift(colors);
+				updateStore();
+			}}
+			min="-50"
+			max="50" />
+		<label>
+			Saturation shift:
+			<input
+				type="number"
+				bind:value={saturationShift}
+				on:input={() => {
+					editedColors = addHSLShift(colors);
+					updateStore();
+				}}
+				min="-50"
+				max="50" />
+		</label>
+		<input
+			type="range"
+			class="w-[52vw] h-4"
+			bind:value={lightnessShift}
+			on:input={() => {
+				editedColors = addHSLShift(colors);
+				updateStore();
+			}}
+			min="-50"
+			max="50" />
+		<label>
+			Lightness shift:
+			<input
+				type="number"
+				bind:value={lightnessShift}
+				on:input={() => {
+					editedColors = addHSLShift(colors);
+					updateStore();
+				}}
+				min="-50"
+				max="50" />
+		</label>
+		{#if matched}
+			<p class="text-2xl" style="--theme-color: {matchedHex}">
+				{matched}
+			</p>
+		{/if}
+		<svg
+			preserveAspectRatio="none"
+			class="w-[52vw]"
+			width="1000"
+			height="100"
+			viewBox="0 0 1000 100"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg">
+			{#each editedColors as hexes}
+				{#each hexes.split(" ") as hex, i}
+					<rect
+						class="cursor-pointer"
+						on:click={() => copyHex(i)}
+						on:keypress={() => console.log("key presesd")}
+						width="101"
+						height="100"
+						fill={hex}
+						x={i * 100}
+						y="0" />
+				{/each}
 			{/each}
-		{/each}
-	</svg>
-</div>
+		</svg>
+	</article>
+
+	{#if showModal}
+		<ModalCopyHex {modalHex} />
+	{/if}
+
+	<div class="flex flex-col items-center p-4 bg-slate-50 m-4 w-[12vw] rounded-lg">
+		<a
+			href={"https://uicolors.app/edit?sv1=" + childColorOutput.split(";")[colorIndex]}
+			class="text-lg text-center text-black bg-blue-300 p-4 m-8 mt-0 flex-1 w-full rounded-xl shadow-lg shadow-blue-400 hover:bg-blue-200 active:bg-blue-100"
+			target="_blank"
+			rel="noreferrer">Send {matched} to UIColorsApp</a>
+		<button
+			on:click={() => outputSVGString()}
+			class="text-lg text-center text-black bg-blue-300 p-4 m-8 mb-0 flex-1 w-full rounded-xl shadow-lg shadow-blue-400 hover:bg-blue-200 active:bg-blue-100">
+			Copy SVG to clipboard
+		</button>
+	</div>
+</main>
 
 <style>
 	p {
