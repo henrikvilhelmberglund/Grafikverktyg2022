@@ -178,7 +178,7 @@
 					}}
 					on:mouseup={() => {
 						updateStore();
-						resetHue();
+						// resetHue();
 					}}
 					min="-180"
 					max="180" />
