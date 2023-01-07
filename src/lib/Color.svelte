@@ -54,8 +54,8 @@
       if (hueNew >= 360) {
         hueNew -= 360;
       }
-      if (saturation < 0) {
-        saturation = 0;
+      if (saturation < 1) {
+        saturation = 1;
       }
       if (saturation >= 100) {
         saturation = 100;
