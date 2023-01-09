@@ -1,16 +1,19 @@
 <script>
 	import Fa from "svelte-fa";
-	import { faFlag } from "@fortawesome/free-solid-svg-icons";
 	import { faGithub } from "@fortawesome/free-brands-svg-icons";
 	import Colors from "$lib/Colors.svelte";
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<svelte:head>
+	<title>Color editing tool</title>
+</svelte:head>
 
-<div class="flex flex-row middle p-4 [&>*]:text-6xl">
-	<Fa icon={faFlag} />
-	<Fa icon={faGithub} />
+<h1 class="text-3xl">Color editing tool</h1>
+
+<div class="absolute p-3 -top-3 right-0 [&>*]:text-4xl">
+	<a href="https://github.com/henrikvilhelmberglund/Grafikverktyg2022" aria-label="Github link">
+		<Fa icon={faGithub} />
+	</a>
 </div>
 
 <div>

@@ -3,7 +3,7 @@
 	import { allColors } from "$lib/stores.js";
 	import ModalCopyHex from "./ModalCopyHex.svelte";
 	import ModalCopySVG from "./ModalCopySVG.svelte";
-	import { toHSL, toHex } from "$lib/colorConvert.js";
+	import { toHSL, toHex, toRGB } from "$lib/colorConvert.js";
 	import { ntc } from "$lib/ntc.js";
 	export let colors;
 	export let originalColors;
@@ -36,7 +36,7 @@
 			let lightness = split.split(",")[2].split("%")[0];
 			hueNew = +hueNew.split(",")[0];
 			if (type === "hue") {
-        hueNew += +hueShift + hueOffset;
+				hueNew += +hueShift + hueOffset;
 			}
 			saturation = +saturation;
 			if (type === "saturation") {
@@ -48,29 +48,29 @@
 				lightness += +lightnessShift + lightnessOffset;
 			}
 
-      if (hueNew < 0) {
-        hueNew += 360;
-      }
-      if (hueNew >= 360) {
-        hueNew -= 360;
-      }
-      if (saturation < 1) {
-        saturation = 1;
-      }
-      if (saturation >= 100) {
-        saturation = 100;
-      }
-      if (lightness < 0) {
-        lightness = 0;
-      }
-      if (lightness >= 100) {
-        lightness = 100;
-      }
+			if (hueNew < 0) {
+				hueNew += 360;
+			}
+			if (hueNew >= 360) {
+				hueNew -= 360;
+			}
+			if (saturation < 1) {
+				saturation = 1;
+			}
+			if (saturation >= 100) {
+				saturation = 100;
+			}
+			if (lightness < 0) {
+				lightness = 0;
+			}
+			if (lightness >= 100) {
+				lightness = 100;
+			}
 			let hex = toHex(hueNew, saturation, lightness);
 			if (i < 9) {
-        changedColors += hex + " ";
+				changedColors += hex + " ";
 			} else {
-        changedColors += hex;
+				changedColors += hex;
 			}
 		});
 		let outputArray = [];
@@ -142,6 +142,31 @@
 		saturationShift = 0;
 		lightnessShift = 0;
 	}
+	// https://stackoverflow.com/questions/9733288/how-to-programmatically-calculate-the-contrast-ratio-between-two-colors
+	function luminance(r, g, b) {
+		var a = [r, g, b].map(function (v) {
+			v /= 255;
+			return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+		});
+		return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+	}
+
+	function contrast(rgb1, rgb2) {
+		var lum1 = luminance(rgb1[0], rgb1[1], rgb1[2]);
+		var lum2 = luminance(rgb2[0], rgb2[1], rgb2[2]);
+		var brightest = Math.max(lum1, lum2);
+		var darkest = Math.min(lum1, lum2);
+		return (brightest + 0.05) / (darkest + 0.05);
+	}
+	let bg = [255, 255, 255];
+	$: colorContrast = contrast(toRGB(matchedHex), bg);
+	let bgBlack;
+	$: if (colorContrast < 5) {
+		bgBlack = true;
+	} else {
+		bgBlack = false;
+	}
+	false;
 </script>
 
 <main class="flex">
@@ -155,14 +180,14 @@
 			<label>
 				<input
 					type="text"
-					id="userInput"
+					id="userInput{colorIndex}"
 					bind:value={userInput}
 					on:input={() => {
 						editedColors = Array(userInput);
 						editedColors = addHSLShift(editedColors);
 						updateStore();
 					}}
-					class="w-[34vw] text-center border-black border-2 rounded-lg w-[52vw]" />
+					class="text-center border-black border-2 rounded-lg w-[52vw]" />
 			</label>
 		</div>
 		<div class="flex">
@@ -173,6 +198,7 @@
 			</div>
 			<div class="flex flex-col w-[40vw] p-4 ">
 				<input
+					aria-label="hueShift{colorIndex}"
 					type="range"
 					class="h-12"
 					bind:value={hueShift}
@@ -189,6 +215,7 @@
 				<input
 					type="range"
 					class="h-12"
+					aria-label="saturationShift{colorIndex}"
 					bind:value={saturationShift}
 					on:input={() => {
 						editedColors = addHSLShift(colors, "saturation");
@@ -203,6 +230,7 @@
 				<input
 					type="range"
 					class="h-12"
+					aria-label="lightnessShift{colorIndex}"
 					bind:value={lightnessShift}
 					on:input={() => {
 						editedColors = addHSLShift(colors, "lightness");
@@ -216,9 +244,15 @@
 			</div>
 		</div>
 		{#if matched}
-			<p class="text-2xl" style="--theme-color: {matchedHex}">
-				{matched}
-			</p>
+			{#if bgBlack}
+				<p class="text-2xl bg-black rounded-lg p-1" style="--theme-color: {matchedHex}">
+					{matched}
+				</p>
+			{:else}
+				<p class="text-2xl" style="--theme-color: {matchedHex}">
+					{matched}
+				</p>
+			{/if}
 		{/if}
 		<svg
 			preserveAspectRatio="none"
